@@ -1,3 +1,5 @@
 .metadata/
 *.class
 core/.settings/org.eclipse.jdt.core.prefs
+.recommenders/index/
+.recommenders/
