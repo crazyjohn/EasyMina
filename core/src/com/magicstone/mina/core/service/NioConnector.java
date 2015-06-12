@@ -8,6 +8,7 @@ import com.magicstone.mina.core.future.ConnectFuture;
 import com.magicstone.mina.core.future.IConnectFuture;
 
 public class NioConnector extends BaseIoService implements IConnector {
+	/** the client channel */
 	protected SocketChannel channel;
 
 	@Override

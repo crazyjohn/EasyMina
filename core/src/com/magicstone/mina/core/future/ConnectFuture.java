@@ -8,12 +8,11 @@ import com.magicstone.mina.core.session.IoSession;
  * @author crazyjohn
  *
  */
-public class ConnectFuture implements IConnectFuture {
+public class ConnectFuture extends BaseFuture implements IConnectFuture {
 	protected IoSession session;
 
 	@Override
 	public IoSession getSession() {
 		return session;
 	}
-
 }
