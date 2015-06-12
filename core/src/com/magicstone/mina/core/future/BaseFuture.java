@@ -16,7 +16,7 @@ import com.magicstone.mina.core.ThreadSafeUnit;
  *
  */
 @ThreadSafeUnit
-public abstract class BaseFuture implements IFuture {
+public abstract class BaseFuture implements IoFuture {
 	/** listeners */
 	protected List<IFutureListener> listeners = new CopyOnWriteArrayList<IFutureListener>();
 	/** the flag state */
@@ -32,8 +32,15 @@ public abstract class BaseFuture implements IFuture {
 	 * Get the result;
 	 * 
 	 * @return
+	 * @throws Exception
 	 */
-	public Object getResult() {
+	public Object getResult() throws Exception {
+		// throw when get exception
+		if (result != null && result instanceof Exception) {
+			Exception e = (Exception) result;
+			throw e;
+		}
+		// good result
 		lock.lock();
 		try {
 			return result;
@@ -106,6 +113,7 @@ public abstract class BaseFuture implements IFuture {
 	}
 
 	private void notifyListeners() {
+		// easy to deadlock this way?
 		for (IFutureListener listener : this.listeners) {
 			listener.onFinished(result);
 		}

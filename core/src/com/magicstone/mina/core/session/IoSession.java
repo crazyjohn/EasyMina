@@ -16,4 +16,11 @@ public interface IoSession {
 	 * @return
 	 */
 	public IWriteFuture write(Object msg);
+
+	/**
+	 * Get whether the session is connected;
+	 * 
+	 * @return
+	 */
+	public boolean isConnected();
 }

@@ -7,6 +7,7 @@ import com.magicstone.mina.core.future.FutureListenerAdapter;
 import com.magicstone.mina.core.future.IConnectFuture;
 import com.magicstone.mina.core.service.IConnector;
 import com.magicstone.mina.core.service.NioConnector;
+import com.magicstone.mina.core.session.IoSession;
 
 public class MinaTest {
 
@@ -18,7 +19,8 @@ public class MinaTest {
 		future.addListener(new FutureListenerAdapter() {
 			@Override
 			public void onFinished(Object result) {
-				// TODO: do something
+				IoSession session = (IoSession) result;
+				// TODO: use this session to do something
 			}
 		});
 
