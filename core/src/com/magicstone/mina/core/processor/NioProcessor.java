@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.magicstone.mina.core.session.IoSession;
@@ -29,11 +31,14 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor,
 	/** sessions */
 	protected Map<Long, IoSession> allSessions = new ConcurrentHashMap<Long, IoSession>();
 	protected AtomicLong counter = new AtomicLong();
+	protected ExecutorService executor;
 
 	public NioProcessor(ServerSocketChannel serverChannel) throws IOException {
 		this.serverChannel = serverChannel;
 		selector = Selector.open();
 		serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+		// executor
+		executor = Executors.newSingleThreadExecutor();
 	}
 
 	@Override
@@ -67,7 +72,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor,
 	@Override
 	public void start() {
 		// start worker thread
-		new Thread(this).start();
+		executor.execute(this);
 		super.start();
 	}
 
