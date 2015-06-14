@@ -8,14 +8,14 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.magicstone.mina.core.session.IoSession;
-import com.magicstone.mina.core.session.NioSession;
 
 /**
  * The nio processor;
@@ -25,12 +25,14 @@ import com.magicstone.mina.core.session.NioSession;
  */
 public class NioProcessor extends BaseIoProcessor implements IoProcessor,
 		Runnable {
+	private static final String CHANNEL = "channel";
 	/** socket channel */
 	protected ServerSocketChannel serverChannel;
 	protected Selector selector;
+	/** new sessions */
+	protected Queue<IoSession> newSessions = new ConcurrentLinkedQueue<IoSession>();
 	/** sessions */
 	protected Map<Long, IoSession> allSessions = new ConcurrentHashMap<Long, IoSession>();
-	protected AtomicLong counter = new AtomicLong();
 	protected ExecutorService executor;
 
 	public NioProcessor(ServerSocketChannel serverChannel) throws IOException {
@@ -52,9 +54,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor,
 				while (iterator.hasNext()) {
 					SelectionKey key = iterator.next();
 					// switch
-					if (key.isAcceptable()) {
-						handleNewSession(key);
-					} else if (key.isReadable()) {
+					if (key.isReadable()) {
 						handleSessionRead(key);
 					} else if (key.isWritable()) {
 						handleSessionWrite(key);
@@ -76,15 +76,25 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor,
 		super.start();
 	}
 
-	private void handleNewSession(SelectionKey key) throws IOException {
-		SocketChannel clientChannel = serverChannel.accept();
-		clientChannel.register(selector, SelectionKey.OP_READ
-				& SelectionKey.OP_WRITE);
-		clientChannel.configureBlocking(false);
-		// new session
-		IoSession newSession = new NioSession(clientChannel);
-		this.allSessions.put(counter.incrementAndGet(), newSession);
+	@Override
+	public void addSession(IoSession session) throws IOException {
+		// init session
+		initSession(session);
+		// add to newSessions
+		this.newSessions.add(session);
+		// FIXME: crazyjoh fire the creat session event
+	}
 
+	/**
+	 * Init the session;
+	 * 
+	 * @param session
+	 * @throws IOException
+	 */
+	private void initSession(IoSession session) throws IOException {
+		SocketChannel channel = session.getProperty(CHANNEL);
+		channel.configureBlocking(false);
+		channel.register(selector, SelectionKey.OP_READ & SelectionKey.OP_WRITE);
 	}
 
 	private void handleSessionWrite(SelectionKey key) {

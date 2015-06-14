@@ -16,6 +16,13 @@ public interface IoService {
 	public void shutdown();
 
 	/**
+	 * Is the service shutdown?
+	 * 
+	 * @return
+	 */
+	public boolean isShutdown();
+
+	/**
 	 * Set the io handler;
 	 * 
 	 * @param handler

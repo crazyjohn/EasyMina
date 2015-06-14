@@ -23,4 +23,19 @@ public interface IoSession {
 	 * @return
 	 */
 	public boolean isConnected();
+
+	/**
+	 * Get the session id;
+	 * 
+	 * @return
+	 */
+	public long getId();
+
+	/**
+	 * Get the property;
+	 * 
+	 * @param property
+	 */
+	public <P> P getProperty(String property);
+
 }
