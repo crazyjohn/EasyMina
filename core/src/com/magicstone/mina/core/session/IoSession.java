@@ -1,5 +1,6 @@
 package com.magicstone.mina.core.session;
 
+import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.future.IWriteFuture;
 
 /**
@@ -37,5 +38,22 @@ public interface IoSession {
 	 * @param property
 	 */
 	public <P> P getProperty(String property);
+
+	// public void fireSessionCreated(IoSession session);
+	//
+	// public void fireSessionOpend(IoSession session);
+	//
+	// public void fireMessageReceived(IoSession session, Object msg);
+	//
+	// public void fireMessageSend(IoSession session, Object msg);
+	//
+	// public void fireExceptionCaught(IoSession session, Exception e);
+
+	/**
+	 * Get the io filter chain;
+	 * 
+	 * @return
+	 */
+	public IoFilterChain getFilterChain();
 
 }
