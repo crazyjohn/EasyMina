@@ -10,9 +10,19 @@ import com.magicstone.mina.core.session.IoSession;
  */
 public interface IoFilterChain {
 
-	public IoFilter getHeader();
+	/**
+	 * Get the head filter;
+	 * 
+	 * @return
+	 */
+	public IoFilter getHead();
 
-	public IoFilter getFooter();
+	/**
+	 * Get the tail filter;
+	 * 
+	 * @return
+	 */
+	public IoFilter getTail();
 
 	public void fireSessionCreated(IoSession session);
 

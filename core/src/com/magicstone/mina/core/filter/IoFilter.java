@@ -39,6 +39,13 @@ public interface IoFilter {
 	public void fireMessageSend(IoSession session, Object msg);
 
 	/**
+	 * Fire the session closed;
+	 * 
+	 * @param session
+	 */
+	public void fireSessionClosed(IoSession session);
+
+	/**
 	 * Fire the exception caught;
 	 * 
 	 * @param session

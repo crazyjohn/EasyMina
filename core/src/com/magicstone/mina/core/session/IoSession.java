@@ -2,6 +2,7 @@ package com.magicstone.mina.core.session;
 
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.future.IWriteFuture;
+import com.magicstone.mina.core.processor.IoHandler;
 
 /**
  * The io session;
@@ -55,5 +56,12 @@ public interface IoSession {
 	 * @return
 	 */
 	public IoFilterChain getFilterChain();
+
+	/**
+	 * Get the io handler;
+	 * 
+	 * @return
+	 */
+	public IoHandler getHandler();
 
 }

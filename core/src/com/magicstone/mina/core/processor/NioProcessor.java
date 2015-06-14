@@ -82,7 +82,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor,
 		initSession(session);
 		// add to newSessions
 		this.newSessions.add(session);
-		// FIXME: crazyjoh fire the creat session event
+		// fire the creat session event
 		session.getFilterChain().fireSessionCreated(session);
 	}
 

@@ -5,12 +5,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.future.IWriteFuture;
+import com.magicstone.mina.core.processor.IoHandler;
 
 public abstract class BaseIoSession implements IoSession {
 	/** properties */
 	protected Map<String, Object> properties = new ConcurrentHashMap<String, Object>();
 	/** filter chain */
 	protected IoFilterChain chain;
+	protected IoHandler handler;
+
+	@Override
+	public IoHandler getHandler() {
+		return handler;
+	}
 
 	@Override
 	public IoFilterChain getFilterChain() {
