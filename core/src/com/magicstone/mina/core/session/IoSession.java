@@ -36,9 +36,11 @@ public interface IoSession {
 	/**
 	 * Get the property;
 	 * 
-	 * @param property
+	 * @param name
 	 */
-	public <P> P getProperty(String property);
+	public <P> P getProperty(String name);
+
+	public void setProperty(String name, Object value);
 
 	// public void fireSessionCreated(IoSession session);
 	//

@@ -6,10 +6,6 @@ public abstract class BaseIoService implements IoService {
 	protected IoHandler handler;
 	protected volatile boolean shutdown;
 
-	@Override
-	public void shutdown() {
-		this.shutdown = true;
-	}
 
 	@Override
 	public boolean isShutdown() {

@@ -32,9 +32,14 @@ public abstract class BaseIoSession implements IoSession {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <P> P getProperty(String property) {
-		Object result = this.properties.get(property);
+	public <P> P getProperty(String name) {
+		Object result = this.properties.get(name);
 		return (P) result;
+	}
+
+	@Override
+	public void setProperty(String name, Object value) {
+		this.properties.put(name, value);
 	}
 
 }

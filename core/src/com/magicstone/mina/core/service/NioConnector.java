@@ -66,4 +66,9 @@ public class NioConnector extends BaseIoService implements IConnector {
 		future.setResult(session);
 	}
 
+	@Override
+	public void shutdown() throws IOException {
+		this.shutdown = true;
+	}
+
 }

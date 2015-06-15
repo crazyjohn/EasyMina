@@ -1,5 +1,7 @@
 package com.magicstone.mina.core.service;
 
+import java.io.IOException;
+
 import com.magicstone.mina.core.processor.IoHandler;
 
 /**
@@ -12,11 +14,14 @@ public interface IoService {
 
 	/**
 	 * Shutdown the io service;
+	 * 
+	 * @throws IOException
 	 */
-	public void shutdown();
+	public void shutdown() throws IOException;
 
 	/**
-	 * Is the service shutdown?
+	 * Is the service shutdown?<br>
+	 * Maybe i will use the PoisonPill pattern;
 	 * 
 	 * @return
 	 */

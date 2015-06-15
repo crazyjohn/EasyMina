@@ -18,8 +18,10 @@ public interface IoProcessor {
 
 	/**
 	 * Shutdown the processor;
+	 * 
+	 * @throws IOException
 	 */
-	public void shutdown();
+	public void shutdown() throws IOException;
 
 	/**
 	 * Is the processor shutdown?

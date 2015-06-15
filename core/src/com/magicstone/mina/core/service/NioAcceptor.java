@@ -8,10 +8,13 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import com.magicstone.mina.core.processor.IoProcessor;
+import com.magicstone.mina.core.processor.NioProcessor;
+import com.magicstone.mina.core.processor.NioProcessorPool;
 import com.magicstone.mina.core.session.IoSession;
 import com.magicstone.mina.core.session.NioSession;
 
@@ -22,10 +25,15 @@ import com.magicstone.mina.core.session.NioSession;
  *
  */
 public class NioAcceptor extends BaseIoService implements IAcceptor {
+	private static final int DEFAULT_PROCESSOR_SIZE = Runtime.getRuntime()
+			.availableProcessors() + 1;
+	/** the server channel */
 	protected ServerSocketChannel serverChannel;
-	protected IoProcessor processors;
+	/** processor */
+	protected IoProcessor processor;
 	protected Selector selector;
-	protected Executor executor;
+	protected ExecutorService executor;
+	private String acceptorThreadName = "EasyMinaAcceptor";
 
 	public NioAcceptor(int processorCount) throws IOException {
 		// init
@@ -34,9 +42,19 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 		// register
 		selector = Selector.open();
 		serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-		executor = Executors.newSingleThreadExecutor();
+		executor = Executors.newSingleThreadExecutor(new ThreadFactory() {
+			@Override
+			public Thread newThread(Runnable r) {
+				return new Thread(r, acceptorThreadName);
+			}
+		});
 		// build processors
 		buildProcessors(processorCount);
+	}
+
+	public NioAcceptor() throws IOException {
+		// default size
+		this(DEFAULT_PROCESSOR_SIZE);
 	}
 
 	/**
@@ -46,7 +64,13 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	 * @throws IOException
 	 */
 	private void buildProcessors(int processorCount) throws IOException {
-		// TODO: crazyjohn build processor
+		// buil processor, single or pool
+		if (processorCount <= 1) {
+			this.processor = new NioProcessor(
+					Executors.newSingleThreadExecutor());
+		} else {
+			this.processor = new NioProcessorPool(processorCount);
+		}
 	}
 
 	@Override
@@ -58,7 +82,19 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	}
 
 	private void startWorker() {
+		// start accept worker
 		this.executor.execute(new AcceptorWorker());
+		// start processor worker
+		this.processor.start();
+	}
+
+	@Override
+	public void shutdown() throws IOException {
+		// shutdown processor
+		this.shutdown = true;
+		this.processor.shutdown();
+		// shutdown the executor
+		this.executor.shutdownNow();
 	}
 
 	/**
@@ -121,6 +157,6 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	private void attachToProcessor(SocketChannel clientChannel)
 			throws IOException {
 		IoSession session = new NioSession(clientChannel);
-		this.processors.addSession(session);
+		this.processor.addSession(session);
 	}
 }

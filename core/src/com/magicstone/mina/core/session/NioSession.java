@@ -4,6 +4,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.magicstone.mina.core.ImmutableUnit;
+import com.magicstone.mina.core.util.Constants;
 
 /**
  * The nio session;
@@ -20,6 +21,8 @@ public class NioSession extends BaseIoSession implements IoSession {
 
 	public NioSession(SocketChannel channel) {
 		this.channel = channel;
+		// set property
+		this.setProperty(Constants.CHANNEL, channel);
 		id = counter.incrementAndGet();
 	}
 
@@ -32,7 +35,5 @@ public class NioSession extends BaseIoSession implements IoSession {
 	public long getId() {
 		return id;
 	}
-
-	
 
 }
