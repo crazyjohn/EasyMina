@@ -55,7 +55,24 @@ public class DefaultIoFilterChain implements IoFilterChain {
 		}
 	}
 
+	/**
+	 * The function object;
+	 * 
+	 * @author crazyjohn
+	 *
+	 */
+	interface IFunctionObject {
+		/**
+		 * Do the call;
+		 * 
+		 * @param filter
+		 */
+		public void doCall(IoFilter filter);
+	}
+
 	public DefaultIoFilterChain() {
+		// set head
+		this.head = new IoFilterAdapter();
 		// set tail
 		this.tail = new TailFilter();
 	}
@@ -71,33 +88,71 @@ public class DefaultIoFilterChain implements IoFilterChain {
 	}
 
 	@Override
-	public void fireSessionCreated(IoSession session) {
-		// TODO Auto-generated method stub
+	public void fireSessionCreated(final IoSession session) {
+		this.templateSkeleton(new IFunctionObject() {
+			@Override
+			public void doCall(IoFilter filter) {
+				filter.fireSessionCreated(session);
+			}
+		});
 
 	}
 
-	@Override
-	public void fireSessionOpend(IoSession session) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * The template method skeleton;
+	 * 
+	 * @param iFunction
+	 */
+	protected final void templateSkeleton(IFunctionObject iFunction) {
+		// do head
+		iFunction.doCall(head);
+		// do body
+		for (IoFilter eachFilter : this.body) {
+			iFunction.doCall(eachFilter);
+		}
+		// do tail
+		iFunction.doCall(tail);
 	}
 
 	@Override
-	public void fireMessageReceived(IoSession session, Object msg) {
-		// TODO Auto-generated method stub
-
+	public void fireSessionOpend(final IoSession session) {
+		this.templateSkeleton(new IFunctionObject() {
+			@Override
+			public void doCall(IoFilter filter) {
+				filter.fireSessionOpend(session);
+			}
+		});
 	}
 
 	@Override
-	public void fireMessageSend(IoSession session, Object msg) {
-		// TODO Auto-generated method stub
+	public void fireMessageReceived(final IoSession session, final Object msg) {
+		this.templateSkeleton(new IFunctionObject() {
+			@Override
+			public void doCall(IoFilter filter) {
+				filter.fireMessageReceived(session, msg);
+			}
 
+		});
 	}
 
 	@Override
-	public void fireExceptionCaught(IoSession session, Exception e) {
-		// TODO Auto-generated method stub
+	public void fireMessageSend(final IoSession session, final Object msg) {
+		this.templateSkeleton(new IFunctionObject() {
+			@Override
+			public void doCall(IoFilter filter) {
+				filter.fireMessageSend(session, msg);
+			}
+		});
+	}
 
+	@Override
+	public void fireExceptionCaught(final IoSession session, final Exception e) {
+		this.templateSkeleton(new IFunctionObject() {
+			@Override
+			public void doCall(IoFilter filter) {
+				filter.fireExceptionCaught(session, e);
+			}
+		});
 	}
 
 }
