@@ -85,7 +85,7 @@ public abstract class BaseFuture implements IoFuture {
 			lock.unlock();
 		}
 		// notify, right?
-		notifyListeners();
+		// notifyListeners();
 		return true;
 	}
 
@@ -100,7 +100,7 @@ public abstract class BaseFuture implements IoFuture {
 			lock.unlock();
 		}
 		// notify, right?
-		notifyListeners();
+		// notifyListeners();
 		return true;
 	}
 
