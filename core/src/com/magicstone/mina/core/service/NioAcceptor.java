@@ -156,7 +156,7 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	 */
 	private void attachToProcessor(SocketChannel clientChannel)
 			throws IOException {
-		IoSession session = new NioSession(clientChannel);
+		IoSession session = new NioSession(clientChannel, handler);
 		this.processor.addSession(session);
 	}
 }

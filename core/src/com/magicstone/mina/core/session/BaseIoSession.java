@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.future.IWriteFuture;
-import com.magicstone.mina.core.processor.IoHandler;
+import com.magicstone.mina.core.handler.IoHandler;
 
 public abstract class BaseIoSession implements IoSession {
 	/** properties */

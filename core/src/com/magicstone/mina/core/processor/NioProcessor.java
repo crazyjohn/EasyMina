@@ -49,7 +49,10 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 		public void run() {
 			while (!isShutDown) {
 				try {
-					selector.select();
+					// 1. handle new sessions
+					handleNewSessions();
+					// 2. do select
+					selector.select(Constants.SELECT_INTERVAL);
 					Set<SelectionKey> selectedKeys = selector.selectedKeys();
 					// iterator
 					Iterator<SelectionKey> iterator = selectedKeys.iterator();
@@ -63,6 +66,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 						}
 						iterator.remove();
 					}
+
 				} catch (IOException e) {
 					// TODO crazyjohn how to handle this exception?
 					e.printStackTrace();
@@ -71,6 +75,14 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 			}
 		}
 
+	}
+
+	private void handleNewSessions() {
+		for (IoSession session : newSessions) {
+			// fire the creat session event
+			session.getFilterChain().fireSessionCreated(session);
+		}
+		newSessions.clear();
 	}
 
 	@Override
@@ -86,8 +98,6 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 		initSession(session);
 		// add to newSessions
 		this.newSessions.add(session);
-		// fire the creat session event
-		session.getFilterChain().fireSessionCreated(session);
 	}
 
 	/**

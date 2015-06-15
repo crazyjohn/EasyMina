@@ -62,7 +62,7 @@ public class NioConnector extends BaseIoService implements IConnector {
 	}
 
 	private void attachSessionToFuture(IoSession session, IConnectFuture future) {
-		session = new NioSession(this.channel);
+		session = new NioSession(this.channel, this.handler);
 		future.setResult(session);
 	}
 

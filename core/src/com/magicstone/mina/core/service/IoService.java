@@ -2,7 +2,7 @@ package com.magicstone.mina.core.service;
 
 import java.io.IOException;
 
-import com.magicstone.mina.core.processor.IoHandler;
+import com.magicstone.mina.core.handler.IoHandler;
 
 /**
  * The io service;

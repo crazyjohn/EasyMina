@@ -1,4 +1,4 @@
-package com.magicstone.mina.core.processor;
+package com.magicstone.mina.core.handler;
 
 import com.magicstone.mina.core.session.IoSession;
 

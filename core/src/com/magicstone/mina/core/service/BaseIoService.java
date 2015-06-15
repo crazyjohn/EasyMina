@@ -1,6 +1,6 @@
 package com.magicstone.mina.core.service;
 
-import com.magicstone.mina.core.processor.IoHandler;
+import com.magicstone.mina.core.handler.IoHandler;
 
 public abstract class BaseIoService implements IoService {
 	protected IoHandler handler;

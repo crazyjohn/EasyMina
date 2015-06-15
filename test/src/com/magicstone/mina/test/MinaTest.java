@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 
 import com.magicstone.mina.core.future.FutureListenerAdapter;
 import com.magicstone.mina.core.future.IConnectFuture;
+import com.magicstone.mina.core.handler.LogIoHandler;
 import com.magicstone.mina.core.service.IAcceptor;
 import com.magicstone.mina.core.service.IConnector;
 import com.magicstone.mina.core.service.NioAcceptor;
@@ -23,6 +24,7 @@ public class MinaTest {
 			InterruptedException {
 		// acceptor
 		IAcceptor acceptor = new NioAcceptor();
+		acceptor.setHandler(new LogIoHandler());
 		acceptor.bind("localhost", 9595);
 
 		// connector
@@ -38,7 +40,7 @@ public class MinaTest {
 			}
 		});
 		// sleep
-		Thread.sleep(5 * 1000);
+		Thread.sleep(20 * 1000);
 		// shutdown
 		acceptor.shutdown();
 	}
