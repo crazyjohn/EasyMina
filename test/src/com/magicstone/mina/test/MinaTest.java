@@ -36,7 +36,7 @@ public class MinaTest {
 			@Override
 			public void onFinished(Object result) {
 				IoSession session = (IoSession) result;
-				// TODO: use this session to do something
+				System.out.println(session);
 			}
 		});
 		// sleep
