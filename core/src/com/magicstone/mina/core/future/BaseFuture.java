@@ -58,6 +58,8 @@ public abstract class BaseFuture implements IoFuture {
 		lock.lock();
 		try {
 			this.result = result;
+			// notify, right?
+			notifyListeners();
 			// set flag
 			this.isDone = true;
 			this.done.signalAll();
