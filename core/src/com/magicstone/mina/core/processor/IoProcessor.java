@@ -37,4 +37,6 @@ public interface IoProcessor {
 	 * @throws IOException
 	 */
 	public void addSession(IoSession session) throws IOException;
+
+	public void addFlushSession(IoSession session);
 }

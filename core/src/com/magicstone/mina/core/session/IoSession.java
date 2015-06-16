@@ -75,4 +75,8 @@ public interface IoSession {
 	 */
 	public ByteBuffer getWriteBuffer();
 
+	/**
+	 * Flush;
+	 */
+	public void flush();
 }

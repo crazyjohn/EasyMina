@@ -70,4 +70,9 @@ public class NioProcessorPool extends BaseIoProcessor {
 		this.executor.shutdownNow();
 	}
 
+	@Override
+	public void addFlushSession(IoSession session) {
+		this.getProcessor(session).addFlushSession(session);
+	}
+
 }
