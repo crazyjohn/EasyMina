@@ -4,7 +4,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.magicstone.mina.core.ImmutableUnit;
-import com.magicstone.mina.core.filter.DefaultIoFilterChain;
+import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.handler.IoHandler;
 import com.magicstone.mina.core.util.Constants;
 
@@ -21,18 +21,14 @@ public class NioSession extends BaseIoSession implements IoSession {
 	/** counter */
 	protected static AtomicLong counter = new AtomicLong();
 
-	public NioSession(SocketChannel channel, IoHandler handler) {
+	public NioSession(SocketChannel channel, IoHandler handler,
+			IoFilterChain chain) {
 		this.channel = channel;
 		this.handler = handler;
 		// set property
 		this.setProperty(Constants.CHANNEL, channel);
 		id = counter.incrementAndGet();
-		// build filterChain
-		buildFilterChain();
-	}
-
-	private void buildFilterChain() {
-		this.chain = new DefaultIoFilterChain();
+		this.chain = chain;
 	}
 
 	@Override

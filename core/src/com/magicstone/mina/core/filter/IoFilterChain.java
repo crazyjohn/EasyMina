@@ -24,6 +24,10 @@ public interface IoFilterChain {
 	 */
 	public IoFilter getTail();
 
+	public void addLast(IoFilter filter);
+
+	public void addFirst(IoFilter filter);
+
 	public void fireSessionCreated(IoSession session);
 
 	public void fireSessionOpend(IoSession session);

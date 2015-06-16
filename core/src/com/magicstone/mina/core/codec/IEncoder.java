@@ -1,5 +1,8 @@
 package com.magicstone.mina.core.codec;
 
-public class IEncoder {
+import com.magicstone.mina.core.session.IoSession;
 
+public interface IEncoder {
+
+	public void encode(IoSession session, Object msg);
 }

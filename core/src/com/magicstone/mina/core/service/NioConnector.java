@@ -7,7 +7,6 @@ import java.nio.channels.SocketChannel;
 import com.magicstone.mina.core.future.ConnectFuture;
 import com.magicstone.mina.core.future.IConnectFuture;
 import com.magicstone.mina.core.session.IoSession;
-import com.magicstone.mina.core.session.NioSession;
 
 /**
  * The nio connector;
@@ -62,7 +61,7 @@ public class NioConnector extends BaseIoService implements IConnector {
 	}
 
 	private void attachSessionToFuture(IoSession session, IConnectFuture future) {
-		session = new NioSession(this.channel, this.handler);
+		session = createSession(this.channel, this.handler, this.chain);
 		future.setResult(session);
 	}
 

@@ -11,5 +11,4 @@ import java.io.IOException;
 public interface IAcceptor extends IoService {
 
 	public void bind(String host, int port) throws IOException;
-
 }

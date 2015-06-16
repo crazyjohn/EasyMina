@@ -155,4 +155,14 @@ public class DefaultIoFilterChain implements IoFilterChain {
 		});
 	}
 
+	@Override
+	public void addLast(IoFilter filter) {
+		body.addLast(filter);
+	}
+
+	@Override
+	public void addFirst(IoFilter filter) {
+		body.addFirst(filter);
+	}
+
 }

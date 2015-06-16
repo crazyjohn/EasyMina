@@ -12,11 +12,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import com.magicstone.mina.core.filter.DefaultIoFilterChain;
 import com.magicstone.mina.core.processor.IoProcessor;
 import com.magicstone.mina.core.processor.NioProcessor;
 import com.magicstone.mina.core.processor.NioProcessorPool;
 import com.magicstone.mina.core.session.IoSession;
-import com.magicstone.mina.core.session.NioSession;
 
 /**
  * The nio acceptor;
@@ -39,6 +39,8 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 		// init
 		serverChannel = ServerSocketChannel.open();
 		serverChannel.configureBlocking(false);
+		// build filterChain
+		buildFilterChain();
 		// register
 		selector = Selector.open();
 		serverChannel.register(selector, SelectionKey.OP_ACCEPT);
@@ -55,6 +57,10 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	public NioAcceptor() throws IOException {
 		// default size
 		this(DEFAULT_PROCESSOR_SIZE);
+	}
+
+	private void buildFilterChain() {
+		this.chain = new DefaultIoFilterChain();
 	}
 
 	/**
@@ -156,7 +162,8 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	 */
 	private void attachToProcessor(SocketChannel clientChannel)
 			throws IOException {
-		IoSession session = new NioSession(clientChannel, handler);
+		IoSession session = createSession(clientChannel, handler, this.chain);
 		this.processor.addSession(session);
 	}
+
 }

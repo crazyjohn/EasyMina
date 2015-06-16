@@ -2,6 +2,7 @@ package com.magicstone.mina.core.service;
 
 import java.io.IOException;
 
+import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.handler.IoHandler;
 
 /**
@@ -33,4 +34,7 @@ public interface IoService {
 	 * @param handler
 	 */
 	public void setHandler(IoHandler handler);
+
+	public IoFilterChain getFilterChain();
+
 }
