@@ -87,6 +87,7 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 		this.executor.execute(new AcceptorWorker());
 		// start processor worker
 		this.processor.start();
+		System.out.println("NioAcceptor started.");
 	}
 
 	@Override
