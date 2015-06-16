@@ -3,9 +3,13 @@ package com.magicstone.mina.core.service;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import com.magicstone.mina.core.future.ConnectFuture;
 import com.magicstone.mina.core.future.IConnectFuture;
+import com.magicstone.mina.core.processor.IoProcessor;
+import com.magicstone.mina.core.processor.NioProcessor;
 import com.magicstone.mina.core.session.IoSession;
 
 /**
@@ -16,7 +20,25 @@ import com.magicstone.mina.core.session.IoSession;
  */
 public class NioConnector extends BaseIoService implements IConnector {
 	/** the client channel */
-	protected SocketChannel channel;
+	private SocketChannel channel;
+	private static String threadName = "EasyMinaConnector";
+
+	public NioConnector(IoProcessor processor) {
+		this.processor = processor;
+	}
+
+	public NioConnector() throws IOException {
+		this(new NioProcessor(
+				Executors.newSingleThreadExecutor(new ThreadFactory() {
+
+					@Override
+					public Thread newThread(Runnable r) {
+						return new Thread(r, threadName);
+					}
+				})));
+		// start processor
+		this.processor.start();
+	}
 
 	@Override
 	public IConnectFuture connect(final InetSocketAddress address)
@@ -41,6 +63,13 @@ public class NioConnector extends BaseIoService implements IConnector {
 		return future;
 	}
 
+	/**
+	 * Start the connect worker;
+	 * 
+	 * @param address
+	 * @param session
+	 * @param future
+	 */
 	private void startConnectWorker(final InetSocketAddress address,
 			final IoSession session, final IConnectFuture future) {
 		// do connect
@@ -59,11 +88,12 @@ public class NioConnector extends BaseIoService implements IConnector {
 					future.setResult(e);
 				}
 			}
-		}).start();
+		}, "NioConnector").start();
 	}
 
-	private void attachSessionToFuture(IoSession session, IConnectFuture future) {
-		session = createSession(this.channel, this.handler, this.chain);
+	private void attachSessionToFuture(IoSession session, IConnectFuture future)
+			throws IOException {
+		session = createNewSession(this.channel);
 		future.setResult(session);
 	}
 

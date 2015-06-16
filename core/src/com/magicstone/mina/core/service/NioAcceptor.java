@@ -12,10 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import com.magicstone.mina.core.processor.IoProcessor;
 import com.magicstone.mina.core.processor.NioProcessor;
 import com.magicstone.mina.core.processor.NioProcessorPool;
-import com.magicstone.mina.core.session.IoSession;
 
 /**
  * The nio acceptor;
@@ -27,11 +25,9 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	private static final int DEFAULT_PROCESSOR_SIZE = Runtime.getRuntime()
 			.availableProcessors() + 1;
 	/** the server channel */
-	protected ServerSocketChannel serverChannel;
-	/** processor */
-	protected IoProcessor processor;
-	protected Selector selector;
-	protected ExecutorService executor;
+	private ServerSocketChannel serverChannel;
+	private Selector selector;
+	private ExecutorService executor;
 	private String acceptorThreadName = "EasyMinaAcceptor";
 
 	public NioAcceptor(int processorCount) throws IOException {
@@ -144,22 +140,10 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 			SelectionKey key = iterator.next();
 			if (key.isAcceptable()) {
 				SocketChannel clientChannel = this.serverChannel.accept();
-				attachToProcessor(clientChannel);
+				createNewSession(clientChannel);
 			}
 			iterator.remove();
 		}
-	}
-
-	/**
-	 * Attach the session to processor;
-	 * 
-	 * @param clientChannel
-	 * @throws IOException
-	 */
-	private void attachToProcessor(SocketChannel clientChannel)
-			throws IOException {
-		IoSession session = createSession(clientChannel, handler, this.chain);
-		this.processor.addSession(session);
 	}
 
 }

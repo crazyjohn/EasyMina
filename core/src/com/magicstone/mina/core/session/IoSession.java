@@ -78,5 +78,5 @@ public interface IoSession {
 	/**
 	 * Flush;
 	 */
-	public void flush();
+	public void fireWrite();
 }

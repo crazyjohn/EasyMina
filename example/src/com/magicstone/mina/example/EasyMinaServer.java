@@ -24,7 +24,7 @@ public class EasyMinaServer {
 		acceptor.bind("localhost", 9595);
 
 		// sleep
-		Thread.sleep(20 * 1000);
+		Thread.sleep(5 * 60 * 1000);
 		// shutdown
 		acceptor.shutdown();
 	}

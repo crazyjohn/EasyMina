@@ -7,4 +7,10 @@ public class LogIoHandler extends IoHandlerAdapter {
 	public void onSessionCreated(IoSession session) {
 		System.out.println("LogIoHandler sessionCreated: " + session);
 	}
+
+	@Override
+	public void onMessageSend(IoSession session, Object msg) {
+		System.out.println(String.format(
+				"LogIoHandler onMessageSend: %s, msg: %s", session, msg));
+	}
 }

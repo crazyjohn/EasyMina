@@ -46,11 +46,13 @@ public abstract class BaseIoSession implements IoSession {
 		if (processor != null) {
 			processor.addFlushSession(this);
 		}
+		// flush
+		fireWrite();
 		return null;
 	}
 
 	@Override
-	public void flush() {
+	public void fireWrite() {
 		for (Object eachMsg : this.writeQueue) {
 			this.chain.fireMessageSend(this, eachMsg);
 		}

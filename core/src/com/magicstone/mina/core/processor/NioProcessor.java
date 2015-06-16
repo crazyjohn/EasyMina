@@ -24,14 +24,15 @@ import com.magicstone.mina.core.util.Constants;
  */
 public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	/** new sessions */
-	protected Queue<IoSession> newSessions = new ConcurrentLinkedQueue<IoSession>();
+	private Queue<IoSession> newSessions = new ConcurrentLinkedQueue<IoSession>();
 	/** sessions */
-	protected Map<Long, IoSession> allSessions = new ConcurrentHashMap<Long, IoSession>();
+	// private Map<Long, IoSession> allSessions = new ConcurrentHashMap<Long,
+	// IoSession>();
 	/** needFlushSessions */
 	private Map<Long, IoSession> needFlushSessions = new ConcurrentHashMap<Long, IoSession>();
-	protected Selector selector;
+	private Selector selector;
 	/** executor */
-	protected ExecutorService executorService;
+	private ExecutorService executorService;
 
 	public NioProcessor(ExecutorService executor) throws IOException {
 		selector = Selector.open();
@@ -91,7 +92,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	 */
 	private void flushSessions() throws IOException {
 		for (IoSession session : this.needFlushSessions.values()) {
-			session.flush();
+			flushSession(session);
 		}
 		this.needFlushSessions.clear();
 	}

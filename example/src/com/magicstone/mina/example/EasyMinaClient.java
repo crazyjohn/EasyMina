@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 
 import com.magicstone.mina.core.future.FutureListenerAdapter;
 import com.magicstone.mina.core.future.IConnectFuture;
+import com.magicstone.mina.core.handler.LogIoHandler;
 import com.magicstone.mina.core.service.IConnector;
 import com.magicstone.mina.core.service.NioConnector;
 import com.magicstone.mina.core.session.IoSession;
@@ -20,6 +21,7 @@ public class EasyMinaClient {
 	public static void main(String[] args) throws IOException {
 		// connector
 		IConnector connector = new NioConnector();
+		connector.setHandler(new LogIoHandler());
 		IConnectFuture future = connector.connect(new InetSocketAddress(
 				"127.0.0.1", 9595));
 		// 1. addListener
@@ -27,7 +29,9 @@ public class EasyMinaClient {
 			@Override
 			public void onFinished(Object result) {
 				IoSession session = (IoSession) result;
-				System.out.println(session);
+				System.out.println(String.format(
+						"Succeed connect to server, sessionInfo: %s", session));
+				session.write("hi, EasyMina");
 			}
 		});
 	}
