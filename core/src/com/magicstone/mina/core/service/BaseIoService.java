@@ -35,4 +35,8 @@ public abstract class BaseIoService implements IoService {
 		return session;
 	}
 
+	protected void buildFilterChain() {
+		this.chain = new DefaultIoFilterChain();
+	}
+
 }

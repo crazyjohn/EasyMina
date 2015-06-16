@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import com.magicstone.mina.core.filter.DefaultIoFilterChain;
 import com.magicstone.mina.core.processor.IoProcessor;
 import com.magicstone.mina.core.processor.NioProcessor;
 import com.magicstone.mina.core.processor.NioProcessorPool;
@@ -57,10 +56,6 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 	public NioAcceptor() throws IOException {
 		// default size
 		this(DEFAULT_PROCESSOR_SIZE);
-	}
-
-	private void buildFilterChain() {
-		this.chain = new DefaultIoFilterChain();
 	}
 
 	/**

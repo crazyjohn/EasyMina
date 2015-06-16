@@ -1,4 +1,4 @@
-package com.magicstone.mina.test;
+package com.magicstone.mina.example;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

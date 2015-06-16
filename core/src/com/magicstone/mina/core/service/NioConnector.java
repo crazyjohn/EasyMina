@@ -25,6 +25,8 @@ public class NioConnector extends BaseIoService implements IConnector {
 		channel = SocketChannel.open();
 		// no-blocking
 		channel.configureBlocking(false);
+		// build filterChain
+		buildFilterChain();
 		final IConnectFuture future = new ConnectFuture();
 		boolean isConnected = channel.connect(address);
 		// build session when connect succeed
