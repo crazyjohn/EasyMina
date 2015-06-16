@@ -27,6 +27,8 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	protected Queue<IoSession> newSessions = new ConcurrentLinkedQueue<IoSession>();
 	/** sessions */
 	protected Map<Long, IoSession> allSessions = new ConcurrentHashMap<Long, IoSession>();
+	/** needFlushSessions */
+	private Queue<IoSession> needFlushSessions = new ConcurrentLinkedQueue<IoSession>();
 	protected Selector selector;
 	/** executor */
 	protected ExecutorService executorService;
@@ -53,6 +55,10 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 					handleNewSessions();
 					// 2. do select
 					selector.select(Constants.SELECT_INTERVAL);
+					// 3. flush sessions
+					flushSessions();
+					// 4. read data from sessions
+					readFromSessions();
 					Set<SelectionKey> selectedKeys = selector.selectedKeys();
 					// iterator
 					Iterator<SelectionKey> iterator = selectedKeys.iterator();
@@ -77,6 +83,39 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 
 	}
 
+	/**
+	 * Flush the sessions;
+	 * 
+	 * @throws IOException
+	 */
+	private void flushSessions() throws IOException {
+		for (IoSession session : this.needFlushSessions) {
+			flushSession(session);
+		}
+		this.needFlushSessions.clear();
+	}
+
+	/**
+	 * Write the data to channel;
+	 * 
+	 * @param session
+	 * @throws IOException
+	 */
+	private void flushSession(IoSession session) throws IOException {
+		ByteBuffer writeBuffer = session.getWriteBuffer();
+		SocketChannel channel = session.getProperty(Constants.CHANNEL);
+		if (channel == null) {
+			return;
+		}
+		while (writeBuffer.hasRemaining()) {
+			channel.write(writeBuffer);
+		}
+
+	}
+
+	/**
+	 * Hanle the new sessions;
+	 */
 	private void handleNewSessions() {
 		for (IoSession session : newSessions) {
 			// fire the creat session event

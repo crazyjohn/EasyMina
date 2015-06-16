@@ -1,5 +1,7 @@
 package com.magicstone.mina.core.session;
 
+import java.nio.ByteBuffer;
+
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.future.IWriteFuture;
 import com.magicstone.mina.core.handler.IoHandler;
@@ -65,5 +67,12 @@ public interface IoSession {
 	 * @return
 	 */
 	public IoHandler getHandler();
+
+	/**
+	 * Get the write buffer;
+	 * 
+	 * @return
+	 */
+	public ByteBuffer getWriteBuffer();
 
 }

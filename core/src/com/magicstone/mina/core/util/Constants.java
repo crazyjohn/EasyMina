@@ -3,5 +3,6 @@ package com.magicstone.mina.core.util;
 public class Constants {
 
 	public static final String CHANNEL = "channel";
+	public static final int WRITE_BUFFER_SIZE = 64;
 	public static long SELECT_INTERVAL = 100;
 }
