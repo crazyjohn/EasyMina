@@ -59,19 +59,6 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 					flushSessions();
 					// 4. read data from sessions
 					readFromSessions();
-					Set<SelectionKey> selectedKeys = selector.selectedKeys();
-					// iterator
-					Iterator<SelectionKey> iterator = selectedKeys.iterator();
-					while (iterator.hasNext()) {
-						SelectionKey key = iterator.next();
-						// switch
-						if (key.isReadable()) {
-							handleSessionRead(key);
-						} else if (key.isWritable()) {
-							handleSessionWrite(key);
-						}
-						iterator.remove();
-					}
 
 				} catch (IOException e) {
 					// TODO crazyjohn how to handle this exception?
@@ -81,6 +68,20 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 			}
 		}
 
+	}
+
+	private void readFromSessions() throws IOException {
+		Set<SelectionKey> selectedKeys = selector.selectedKeys();
+		// iterator
+		Iterator<SelectionKey> iterator = selectedKeys.iterator();
+		while (iterator.hasNext()) {
+			SelectionKey key = iterator.next();
+			// switch
+			if (key.isReadable()) {
+				handleSessionRead(key);
+			}
+			iterator.remove();
+		}
 	}
 
 	/**
@@ -148,20 +149,29 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	private void initSession(IoSession session) throws IOException {
 		SocketChannel channel = session.getProperty(Constants.CHANNEL);
 		channel.configureBlocking(false);
-		channel.register(selector, SelectionKey.OP_READ & SelectionKey.OP_WRITE);
+		channel.register(selector,
+				SelectionKey.OP_READ & SelectionKey.OP_WRITE, session);
 	}
 
-	private void handleSessionWrite(SelectionKey key) {
-		// TODO crazyjohn handle write?
-
-	}
-
+	/**
+	 * Handle the session read;
+	 * 
+	 * @param key
+	 * @throws IOException
+	 */
 	private void handleSessionRead(SelectionKey key) throws IOException {
 		// read from channel
 		SocketChannel clientChannel = (SocketChannel) key.channel();
-		ByteBuffer buffer = ByteBuffer.allocate(64);
+		ByteBuffer buffer = ByteBuffer.allocate(Constants.READ_BUFFER_SIZE);
 		clientChannel.read(buffer);
-		// TODO: fire this read event to filter chain
+		IoSession session = (IoSession) key.attachment();
+		// readBuffer
+		buffer.flip();
+		int length = buffer.limit();
+		ByteBuffer readBuffer = ByteBuffer.wrap(buffer.array(), 0, length);
+		readBuffer.flip();
+		// fire this read event to filter chain
+		session.getFilterChain().fireMessageReceived(session, readBuffer);
 	}
 
 	@Override
