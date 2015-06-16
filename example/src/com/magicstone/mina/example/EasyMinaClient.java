@@ -3,6 +3,7 @@ package com.magicstone.mina.example;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import com.magicstone.mina.core.codec.CodecFilter;
 import com.magicstone.mina.core.future.FutureListenerAdapter;
 import com.magicstone.mina.core.future.IConnectFuture;
 import com.magicstone.mina.core.handler.LogIoHandler;
@@ -22,6 +23,7 @@ public class EasyMinaClient {
 		// connector
 		IConnector connector = new NioConnector();
 		connector.setHandler(new LogIoHandler());
+		connector.getFilterChain().addLast(new CodecFilter(new CodecFactory()));
 		IConnectFuture future = connector.connect(new InetSocketAddress(
 				"127.0.0.1", 9595));
 		// 1. addListener

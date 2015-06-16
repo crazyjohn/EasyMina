@@ -33,16 +33,6 @@ public abstract class BaseIoService implements IoService {
 		return chain;
 	}
 
-	protected IoSession createSession(SocketChannel channel, IoHandler handler,
-			IoFilterChain chain) {
-		IoSession session = new NioSession(channel, handler, chain);
-		return session;
-	}
-
-	protected void buildFilterChain() {
-		this.chain = new DefaultIoFilterChain();
-	}
-
 	/**
 	 * Attach the session to processor;
 	 * 
@@ -51,7 +41,7 @@ public abstract class BaseIoService implements IoService {
 	 */
 	protected IoSession createNewSession(SocketChannel clientChannel)
 			throws IOException {
-		IoSession session = createSession(clientChannel, handler, this.chain);
+		IoSession session = new NioSession(clientChannel, handler, chain);
 		this.processor.addSession(session);
 		return session;
 	}

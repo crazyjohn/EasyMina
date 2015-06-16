@@ -34,8 +34,6 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 		// init
 		serverChannel = ServerSocketChannel.open();
 		serverChannel.configureBlocking(false);
-		// build filterChain
-		buildFilterChain();
 		// register
 		selector = Selector.open();
 		serverChannel.register(selector, SelectionKey.OP_ACCEPT);
