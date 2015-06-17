@@ -1,5 +1,11 @@
 package com.magicstone.mina.core.util;
 
+/**
+ * Constans;
+ * 
+ * @author crazyjohn
+ *
+ */
 public class Constants {
 
 	public static final String CHANNEL = "channel";

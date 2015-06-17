@@ -3,6 +3,7 @@ package com.magicstone.mina.core.service;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
+import com.magicstone.mina.core.GuardedByUnit;
 import com.magicstone.mina.core.filter.DefaultIoFilterChain;
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.handler.IoHandler;
@@ -10,8 +11,16 @@ import com.magicstone.mina.core.processor.IoProcessor;
 import com.magicstone.mina.core.session.IoSession;
 import com.magicstone.mina.core.session.NioSession;
 
+/**
+ * The base io service;
+ * 
+ * @author crazyjohn
+ *
+ */
 public abstract class BaseIoService implements IoService {
+	/** io handler */
 	protected IoHandler handler;
+	@GuardedByUnit(whoCareMe = "volatile")
 	protected volatile boolean shutdown;
 	/** filter chain */
 	protected IoFilterChain chain = new DefaultIoFilterChain();

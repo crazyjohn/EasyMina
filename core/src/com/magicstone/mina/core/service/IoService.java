@@ -35,6 +35,11 @@ public interface IoService {
 	 */
 	public void setHandler(IoHandler handler);
 
+	/**
+	 * Get the io fitler chain;
+	 * 
+	 * @return
+	 */
 	public IoFilterChain getFilterChain();
 
 }

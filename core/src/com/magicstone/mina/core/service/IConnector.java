@@ -5,6 +5,12 @@ import java.net.InetSocketAddress;
 
 import com.magicstone.mina.core.future.IConnectFuture;
 
+/**
+ * The connector;
+ * 
+ * @author crazyjohn
+ *
+ */
 public interface IConnector extends IoService {
 
 	/**
