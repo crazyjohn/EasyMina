@@ -1,11 +1,27 @@
 package com.magicstone.mina.example;
 
+import java.nio.ByteBuffer;
+
 import com.magicstone.mina.core.codec.ICodecFactory;
 import com.magicstone.mina.core.codec.IDecoder;
 import com.magicstone.mina.core.codec.IEncoder;
 import com.magicstone.mina.core.session.IoSession;
+import com.magicstone.mina.example.msg.HelloMessage;
+import com.magicstone.mina.example.msg.IMessage;
+import com.magicstone.mina.example.msg.IMessageFactory;
 
 public class CodecFactory implements ICodecFactory {
+	IMessageFactory messageFactory = new IMessageFactory() {
+
+		@Override
+		public IMessage createMessage(int type) {
+			switch (type) {
+			case 1001:
+				return new HelloMessage();
+			}
+			return null;
+		}
+	};
 
 	@Override
 	public IDecoder createDecoder() {
@@ -17,20 +33,32 @@ public class CodecFactory implements ICodecFactory {
 		return new LogEncoder();
 	}
 
-	static class LogEncoder implements IEncoder {
+	class LogEncoder implements IEncoder {
 
 		@Override
-		public void encode(IoSession session, Object msg) {
+		public void encode(IoSession session, Object msg) throws Exception {
 			System.out.println("LogEncoder encode: " + msg);
+			if (msg instanceof IMessage) {
+				IMessage message = (IMessage) msg;
+				msg = message.write();
+				msg = message;
+			}
 		}
 
 	}
 
-	static class LogDecoder implements IDecoder {
+	class LogDecoder implements IDecoder {
 
 		@Override
-		public void decode(IoSession session, Object msg) {
+		public void decode(IoSession session, Object msg) throws Exception {
 			System.out.println("LogDecoder decode: " + msg);
+			if (msg instanceof ByteBuffer) {
+				ByteBuffer readBuffer = (ByteBuffer) msg;
+				int type = readBuffer.getInt();
+				IMessage message = messageFactory.createMessage(type);
+				message.read(readBuffer);
+				msg = message;
+			}
 		}
 
 	}

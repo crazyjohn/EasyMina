@@ -1,5 +1,6 @@
 package com.magicstone.mina.core.codec;
 
+import com.magicstone.mina.core.exception.IEasyMinaMonitor.EasyMinaMonitor;
 import com.magicstone.mina.core.filter.IoFilterAdapter;
 import com.magicstone.mina.core.session.IoSession;
 
@@ -21,13 +22,21 @@ public class CodecFilter extends IoFilterAdapter {
 	@Override
 	public void fireMessageReceived(IoSession session, Object msg) {
 		IDecoder decoder = getDecoder(session);
-		decoder.decode(session, msg);
+		try {
+			decoder.decode(session, msg);
+		} catch (Exception e) {
+			EasyMinaMonitor.getInstance().catchException(e);
+		}
 	}
 
 	@Override
 	public void fireMessageSend(IoSession session, Object msg) {
 		IEncoder encoder = getEncoder(session);
-		encoder.encode(session, msg);
+		try {
+			encoder.encode(session, msg);
+		} catch (Exception e) {
+			EasyMinaMonitor.getInstance().catchException(e);
+		}
 	}
 
 	private IEncoder getEncoder(IoSession session) {

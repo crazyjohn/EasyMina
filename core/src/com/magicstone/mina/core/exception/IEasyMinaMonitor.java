@@ -1,19 +1,20 @@
 package com.magicstone.mina.core.exception;
 
-import com.magicstone.mina.core.filter.IoFilterChain;
-import com.magicstone.mina.core.session.IoSession;
 
 public interface IEasyMinaMonitor {
-	public void catchException(Exception e, IoSession session,
-			IoFilterChain chain);
 
-	class DefaultMonitor implements IEasyMinaMonitor {
+	public void catchException(Exception e);
+
+	public class EasyMinaMonitor implements IEasyMinaMonitor {
+		private static IEasyMinaMonitor instance = new EasyMinaMonitor();
+
+		public static IEasyMinaMonitor getInstance() {
+			return instance;
+		}
 
 		@Override
-		public void catchException(Exception e, IoSession session,
-				IoFilterChain chain) {
+		public void catchException(Exception e) {
 			e.printStackTrace();
-			chain.fireExceptionCaught(session, e);
 		}
 
 	}
