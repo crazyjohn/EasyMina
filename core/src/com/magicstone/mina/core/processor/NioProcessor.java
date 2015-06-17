@@ -55,11 +55,13 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 					// 1. handle new sessions
 					handleNewSessions();
 					// 2. do select
-					selector.select(Constants.SELECT_INTERVAL);
+					int selected = selector.select(Constants.SELECT_INTERVAL);
 					// 3. flush sessions
 					flushSessions();
 					// 4. read data from sessions
-					readFromSessions();
+					if (selected > 0) {
+						readFromSessions();
+					}
 
 				} catch (IOException e) {
 					// TODO crazyjohn how to handle this exception?
@@ -71,6 +73,11 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 
 	}
 
+	/**
+	 * Read data from sessions;
+	 * 
+	 * @throws IOException
+	 */
 	private void readFromSessions() throws IOException {
 		Set<SelectionKey> selectedKeys = selector.selectedKeys();
 		// iterator
@@ -183,6 +190,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	@Override
 	public void shutdown() throws IOException {
 		isShutDown = true;
+		this.executorService.shutdownNow();
 	}
 
 	@Override
