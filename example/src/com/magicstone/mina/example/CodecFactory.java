@@ -17,7 +17,7 @@ public class CodecFactory implements ICodecFactory {
 		public IMessage createMessage(int type) {
 			switch (type) {
 			case 1001:
-				return new HelloMessage();
+				return new HelloMessage(type);
 			}
 			return null;
 		}
@@ -40,8 +40,7 @@ public class CodecFactory implements ICodecFactory {
 			System.out.println("LogEncoder encode: " + msg);
 			if (msg instanceof IMessage) {
 				IMessage message = (IMessage) msg;
-				msg = message.write();
-				msg = message;
+				session.onEncode(message.write());
 			}
 		}
 

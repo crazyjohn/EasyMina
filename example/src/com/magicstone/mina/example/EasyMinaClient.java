@@ -10,6 +10,7 @@ import com.magicstone.mina.core.handler.LogIoHandler;
 import com.magicstone.mina.core.service.IConnector;
 import com.magicstone.mina.core.service.NioConnector;
 import com.magicstone.mina.core.session.IoSession;
+import com.magicstone.mina.example.msg.HelloMessage;
 
 /**
  * The EasyMina client;
@@ -33,7 +34,7 @@ public class EasyMinaClient {
 				IoSession session = (IoSession) result;
 				System.out.println(String.format(
 						"Succeed connect to server, sessionInfo: %s", session));
-				session.write("hi, EasyMina");
+				session.write(new HelloMessage("hi, EasyMina"));
 			}
 		});
 	}

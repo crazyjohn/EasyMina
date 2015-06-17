@@ -21,7 +21,7 @@ import com.magicstone.mina.core.session.IoSession;
 public class NioConnector extends BaseIoService implements IConnector {
 	/** the client channel */
 	private SocketChannel channel;
-	private static String threadName = "EasyMinaConnector";
+	private static String threadName = "EasyMinaIoProcessor";
 
 	public NioConnector(IoProcessor processor) {
 		this.processor = processor;

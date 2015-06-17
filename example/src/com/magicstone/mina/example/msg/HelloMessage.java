@@ -7,12 +7,18 @@ import com.magicstone.mina.example.BaseMessage;
 public class HelloMessage extends BaseMessage {
 	private String msg;
 
-	public String getMsg() {
-		return msg;
+	public HelloMessage(String msg) {
+		super(1001);
+		this.msg = msg;
+
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public HelloMessage(int type) {
+		this("");
+	}
+
+	public String getMessage() {
+		return msg;
 	}
 
 	@Override

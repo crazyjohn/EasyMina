@@ -20,7 +20,7 @@ public class NioProcessorPool extends BaseIoProcessor {
 	/** the io processors */
 	protected List<IoProcessor> processors = new ArrayList<IoProcessor>();
 	private ExecutorService executor;
-	private String threadName = "EasyMinaProcessor";
+	private String threadName = "EasyMinaIoProcessor";
 
 	public NioProcessorPool(int processorCount) throws IOException {
 		// creat executor

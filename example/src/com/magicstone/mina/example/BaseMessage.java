@@ -7,7 +7,9 @@ import com.magicstone.mina.example.msg.IMessage;
 
 public abstract class BaseMessage implements IMessage {
 	protected int type;
-
+	protected BaseMessage(int type) {
+		this.type = type;
+	}
 	@Override
 	public void read(ByteBuffer readBuffer) throws Exception {
 		readHead(readBuffer);
@@ -23,7 +25,11 @@ public abstract class BaseMessage implements IMessage {
 		ByteBuffer result = ByteBuffer.allocate(128);
 		writeHead(result);
 		writeBody(result);
-		return result;
+		result.flip();
+		int length = result.limit();
+		byte[] datas = new byte[length];
+		result.get(datas);
+		return ByteBuffer.wrap(datas);
 	}
 
 	private void writeHead(ByteBuffer result) {

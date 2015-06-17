@@ -104,14 +104,16 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	 * @throws IOException
 	 */
 	protected void flushSession(IoSession session) throws IOException {
+		Queue<ByteBuffer> writeQueue = session.getWriteQueue();
+		for (ByteBuffer encodedMsg : writeQueue) {
 
-		ByteBuffer writeBuffer = session.getWriteBuffer();
-		SocketChannel channel = session.getProperty(Constants.CHANNEL);
-		if (channel == null) {
-			return;
-		}
-		while (writeBuffer.hasRemaining()) {
-			channel.write(writeBuffer);
+			SocketChannel channel = session.getProperty(Constants.CHANNEL);
+			if (channel == null) {
+				return;
+			}
+			while (encodedMsg.hasRemaining()) {
+				channel.write(encodedMsg);
+			}
 		}
 
 	}

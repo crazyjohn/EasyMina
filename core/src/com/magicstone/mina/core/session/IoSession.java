@@ -1,6 +1,7 @@
 package com.magicstone.mina.core.session;
 
 import java.nio.ByteBuffer;
+import java.util.Queue;
 
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.future.IWriteFuture;
@@ -75,8 +76,7 @@ public interface IoSession {
 	 */
 	public ByteBuffer getWriteBuffer();
 
-	/**
-	 * Flush;
-	 */
-	public void fireWrite();
+	Queue<ByteBuffer> getWriteQueue();
+
+	public void onEncode(ByteBuffer write);
 }

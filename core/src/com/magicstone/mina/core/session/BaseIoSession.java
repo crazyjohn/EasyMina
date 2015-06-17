@@ -27,7 +27,12 @@ public abstract class BaseIoSession implements IoSession {
 	protected IoHandler handler;
 	private ByteBuffer writeBuffer = ByteBuffer
 			.allocate(Constants.WRITE_BUFFER_SIZE);
-	private Queue<Object> writeQueue = new ConcurrentLinkedQueue<Object>();
+	private Queue<ByteBuffer> encodedQueue = new ConcurrentLinkedQueue<ByteBuffer>();
+
+	@Override
+	public Queue<ByteBuffer> getWriteQueue() {
+		return encodedQueue;
+	}
 
 	@Override
 	public IoHandler getHandler() {
@@ -41,22 +46,23 @@ public abstract class BaseIoSession implements IoSession {
 
 	@Override
 	public IWriteFuture write(Object msg) {
-		writeQueue.add(msg);
+		// FIXME: crazyjohn future way?
 		IoProcessor processor = this.getProperty(Constants.PROCESSOR);
 		if (processor != null) {
 			processor.addFlushSession(this);
 		}
 		// flush
-		fireWrite();
+		fireWrite(msg);
 		return null;
 	}
 
 	@Override
-	public void fireWrite() {
-		for (Object eachMsg : this.writeQueue) {
-			this.chain.fireMessageSend(this, eachMsg);
-		}
-		this.writeQueue.clear();
+	public void onEncode(ByteBuffer msg) {
+		this.encodedQueue.add(msg);
+	}
+
+	protected void fireWrite(Object msg) {
+		this.chain.fireMessageSend(this, msg);
 	}
 
 	@SuppressWarnings("unchecked")
