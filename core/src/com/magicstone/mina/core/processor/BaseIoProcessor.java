@@ -19,7 +19,7 @@ public abstract class BaseIoProcessor implements IoProcessor {
 	}
 
 	@Override
-	public void start() {
+	public void startup() {
 		isShutDown = false;
 	}
 

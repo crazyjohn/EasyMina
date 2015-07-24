@@ -137,10 +137,10 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	}
 
 	@Override
-	public void start() {
+	public void startup() {
 		// start worker thread
 		executorService.execute(new ProcessorRunnable());
-		super.start();
+		super.startup();
 	}
 
 	@Override

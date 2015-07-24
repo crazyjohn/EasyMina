@@ -14,7 +14,7 @@ public interface IoProcessor {
 	/**
 	 * Start the processor;
 	 */
-	public void start();
+	public void startup();
 
 	/**
 	 * Shutdown the processor;

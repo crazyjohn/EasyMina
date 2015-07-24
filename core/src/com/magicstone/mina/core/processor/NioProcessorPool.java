@@ -55,11 +55,11 @@ public class NioProcessorPool extends BaseIoProcessor {
 	}
 
 	@Override
-	public void start() {
+	public void startup() {
 		for (IoProcessor eachProcessor : this.processors) {
-			eachProcessor.start();
+			eachProcessor.startup();
 		}
-		super.start();
+		super.startup();
 	}
 
 	@Override

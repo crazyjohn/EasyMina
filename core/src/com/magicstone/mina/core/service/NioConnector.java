@@ -37,7 +37,7 @@ public class NioConnector extends BaseIoService implements IConnector {
 					}
 				})));
 		// start processor
-		this.processor.start();
+		this.processor.startup();
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class NioAcceptor extends BaseIoService implements IAcceptor {
 		// start accept worker
 		this.executor.execute(new AcceptorWorker());
 		// start processor worker
-		this.processor.start();
+		this.processor.startup();
 		System.out.println("NioAcceptor started.");
 	}
 
