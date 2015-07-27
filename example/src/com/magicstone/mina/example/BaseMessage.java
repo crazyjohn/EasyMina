@@ -7,9 +7,12 @@ import com.magicstone.mina.example.msg.IMessage;
 
 public abstract class BaseMessage implements IMessage {
 	protected int type;
+	protected int length;
+
 	protected BaseMessage(int type) {
 		this.type = type;
 	}
+
 	@Override
 	public void read(ByteBuffer readBuffer) throws Exception {
 		readHead(readBuffer);
@@ -18,6 +21,7 @@ public abstract class BaseMessage implements IMessage {
 
 	private void readHead(ByteBuffer readBuffer) {
 		this.type = readBuffer.getInt();
+		this.length = readBuffer.getInt();
 	}
 
 	@Override
@@ -27,6 +31,8 @@ public abstract class BaseMessage implements IMessage {
 		writeBody(result);
 		result.flip();
 		int length = result.limit();
+		// put length
+		result.putInt(4, length);
 		byte[] datas = new byte[length];
 		result.get(datas);
 		return ByteBuffer.wrap(datas);
@@ -34,6 +40,7 @@ public abstract class BaseMessage implements IMessage {
 
 	private void writeHead(ByteBuffer result) {
 		result.putInt(this.type);
+		result.putInt(0);
 	}
 
 	@Override
@@ -50,7 +57,7 @@ public abstract class BaseMessage implements IMessage {
 		result = new String(datas, "UTF-8");
 		return result;
 	}
-	
+
 	public void writeString(String str, ByteBuffer buffer)
 			throws UnsupportedEncodingException {
 		int length = str.length();
