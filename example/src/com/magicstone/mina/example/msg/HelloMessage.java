@@ -31,4 +31,10 @@ public class HelloMessage extends BaseMessage {
 		this.writeString(msg, result);
 	}
 
+	@Override
+	public String toString() {
+		return String
+				.format("%s msg: %s", this.getClass().getSimpleName(), msg);
+	}
+
 }

@@ -50,13 +50,13 @@ public class CodecFactory implements ICodecFactory {
 
 		@Override
 		public void decode(IoSession session, Object msg) throws Exception {
-			System.out.println("LogDecoder decode: " + msg);
 			if (msg instanceof ByteBuffer) {
 				ByteBuffer readBuffer = (ByteBuffer) msg;
-				int type = readBuffer.getInt();
+				int type = readBuffer.getInt(0);
 				IMessage message = messageFactory.createMessage(type);
 				message.read(readBuffer);
 				msg = message;
+				System.out.println("LogDecoder decode: " + msg);
 			}
 		}
 

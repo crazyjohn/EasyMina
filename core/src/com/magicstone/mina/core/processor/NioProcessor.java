@@ -113,7 +113,6 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	protected void flushSession(IoSession session) throws IOException {
 		Queue<ByteBuffer> writeQueue = session.getWriteQueue();
 		for (ByteBuffer encodedMsg : writeQueue) {
-
 			SocketChannel channel = session.getProperty(Constants.CHANNEL);
 			if (channel == null) {
 				return;
@@ -160,8 +159,8 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 	private void initSession(IoSession session) throws IOException {
 		SocketChannel channel = session.getProperty(Constants.CHANNEL);
 		channel.configureBlocking(false);
-		channel.register(selector,
-				SelectionKey.OP_READ & SelectionKey.OP_WRITE, session);
+		// FIXME: crazyjohn any problems? & SelectionKey.OP_WRITE
+		channel.register(selector, SelectionKey.OP_READ, session);
 		// set processor
 		session.setProperty(Constants.PROCESSOR, this);
 	}
@@ -182,7 +181,7 @@ public class NioProcessor extends BaseIoProcessor implements IoProcessor {
 		buffer.flip();
 		int length = buffer.limit();
 		ByteBuffer readBuffer = ByteBuffer.wrap(buffer.array(), 0, length);
-		readBuffer.flip();
+		// readBuffer.flip();
 		// fire this read event to filter chain
 		session.getFilterChain().fireMessageReceived(session, readBuffer);
 	}
