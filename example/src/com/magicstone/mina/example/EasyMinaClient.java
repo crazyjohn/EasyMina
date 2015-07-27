@@ -35,6 +35,8 @@ public class EasyMinaClient {
 				System.out.println(String.format(
 						"Succeed connect to server, sessionInfo: %s", session));
 				session.write(new HelloMessage("hi, EasyMina"));
+				
+				session.write(new HelloMessage("is it work?"));
 			}
 		});
 	}
