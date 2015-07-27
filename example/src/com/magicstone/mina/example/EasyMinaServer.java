@@ -20,7 +20,7 @@ public class EasyMinaServer {
 		// acceptor
 		IAcceptor acceptor = new NioAcceptor();
 		acceptor.setHandler(new LogIoHandler());
-		acceptor.getFilterChain().addLast(new CodecFilter(new CodecFactory()));
+		acceptor.getFilterChain().addLast(new CodecFilter(new LogCodecFactory()));
 		acceptor.bind("localhost", 9595);
 
 		// sleep

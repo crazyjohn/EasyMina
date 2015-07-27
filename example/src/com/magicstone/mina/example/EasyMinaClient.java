@@ -24,7 +24,7 @@ public class EasyMinaClient {
 		// connector
 		IConnector connector = new NioConnector();
 		connector.setHandler(new LogIoHandler());
-		connector.getFilterChain().addLast(new CodecFilter(new CodecFactory()));
+		connector.getFilterChain().addLast(new CodecFilter(new LogCodecFactory()));
 		IConnectFuture future = connector.connect(new InetSocketAddress(
 				"127.0.0.1", 9595));
 		// 1. addListener
