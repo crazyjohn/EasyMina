@@ -37,19 +37,22 @@ public class LogDecoder implements IDecoder {
 				if (readBuffer.limit() < Constants.MESSAGE_HEADER_LENGTH) {
 					break;
 				}
+				// get length
 				int length = readBuffer.getInt(4);
 				if (readBuffer.limit() < length) {
 					break;
 				}
+				// get type
 				int type = readBuffer.getInt(0);
 				IMessage message = messageFactory.createMessage(type);
 				message.read(readBuffer);
-				msg = message;
+				// msg = message;
+				// compact
 				readBuffer.compact();
 				readBuffer.flip();
-				System.out.println("LogDecoder decode: " + msg);
+				System.out.println("LogDecoder decode: " + message);
 			}
-			
+
 		}
 	}
 
