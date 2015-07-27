@@ -49,10 +49,10 @@ public abstract class BaseIoSession implements IoSession {
 		// FIXME: crazyjohn future way?
 		IoProcessor processor = this.getProperty(Constants.PROCESSOR);
 		if (processor != null) {
+			// flush
+			fireWrite(msg);
 			processor.addFlushSession(this);
 		}
-		// flush
-		fireWrite(msg);
 		return null;
 	}
 
