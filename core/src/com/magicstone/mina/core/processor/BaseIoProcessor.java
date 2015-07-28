@@ -1,6 +1,6 @@
 package com.magicstone.mina.core.processor;
 
-import com.magicstone.mina.core.GuardedByUnit;
+import com.magicstone.mina.annotation.GuardedByUnit;
 
 /**
  * The base io processor;

@@ -6,8 +6,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.magicstone.mina.core.GuardedByUnit;
-import com.magicstone.mina.core.ThreadSafeUnit;
+import com.magicstone.mina.annotation.GuardedByUnit;
+import com.magicstone.mina.annotation.ThreadSafeUnit;
 
 /**
  * The base future;

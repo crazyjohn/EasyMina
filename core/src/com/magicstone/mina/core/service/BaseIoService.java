@@ -3,7 +3,7 @@ package com.magicstone.mina.core.service;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
-import com.magicstone.mina.core.GuardedByUnit;
+import com.magicstone.mina.annotation.GuardedByUnit;
 import com.magicstone.mina.core.filter.DefaultIoFilterChain;
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.handler.IoHandler;

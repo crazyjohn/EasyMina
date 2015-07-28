@@ -3,7 +3,7 @@ package com.magicstone.mina.core.session;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.magicstone.mina.core.ImmutableUnit;
+import com.magicstone.mina.annotation.ImmutableUnit;
 import com.magicstone.mina.core.filter.IoFilterChain;
 import com.magicstone.mina.core.handler.IoHandler;
 import com.magicstone.mina.core.util.Constants;

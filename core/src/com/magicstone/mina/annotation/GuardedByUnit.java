@@ -1,4 +1,4 @@
-package com.magicstone.mina.core;
+package com.magicstone.mina.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

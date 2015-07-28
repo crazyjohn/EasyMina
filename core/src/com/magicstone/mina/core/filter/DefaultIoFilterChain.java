@@ -2,7 +2,7 @@ package com.magicstone.mina.core.filter;
 
 import java.util.LinkedList;
 
-import com.magicstone.mina.core.NotThreadSafeUnit;
+import com.magicstone.mina.annotation.NotThreadSafeUnit;
 import com.magicstone.mina.core.session.IoSession;
 
 /**

@@ -6,7 +6,7 @@ package com.magicstone.mina.core;
  * @author crazyjohn
  *
  */
-public class Mina {
+public class EasyMina {
 	{
 		System.out.println("Fucker: this is not mina.");
 	}
